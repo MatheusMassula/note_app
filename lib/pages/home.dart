@@ -15,6 +15,13 @@ class Home extends StatelessWidget {
           return NotePreview(noteText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
         }),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('redirecionar para página de criação de nota');
+          //TODO: Criar página de criação/ visualisação de nota
+        },
+        child: Icon(Icons.add)
+      ),
     );
   }
 }
