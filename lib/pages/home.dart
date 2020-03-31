@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/pages/note_record_page.dart';
 import 'package:note_app/widgets/note_preview.dart';
 
 class Home extends StatelessWidget {
@@ -16,9 +17,12 @@ class Home extends StatelessWidget {
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('redirecionar para página de criação de nota');
-          //TODO: Criar página de criação/ visualisação de nota
+        onPressed: () async {
+          String note = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => NoteRecordPage())
+          );
+          //TODO: salvar a nota recebida
         },
         child: Icon(Icons.add)
       ),
