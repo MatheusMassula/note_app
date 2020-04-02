@@ -14,7 +14,6 @@ class NotePreview extends StatelessWidget {
     double _boxDimensions = _size.height > _size.width ? _size.width / 4 : _size.height / 4;
 
     return Padding(
-    
       padding: const EdgeInsets.all(16.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),

@@ -13,23 +13,33 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Minhas notas'),
-        centerTitle: true,
-      ),
+      appBar: _buildAppBar(),
       body: _buildNoteList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          String note = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => NoteRecordPage())
-          );
+      floatingActionButton: _buildAddNoteButton(context),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Text('Minhas notas'),
+      centerTitle: true,
+    );
+  }
+
+  FloatingActionButton _buildAddNoteButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () async {
+        String note = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => NoteRecordPage())
+        );
+        if(note != null) {
           setState(() {
             _notes.add(note);
           });
-        },
-        child: Icon(Icons.add)
-      ),
+        }
+      },
+      child: Icon(Icons.add)
     );
   }
 
@@ -40,7 +50,20 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.all(8.0),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 175.0),
       itemBuilder: (BuildContext context, int index) {
-        return NotePreview(noteText: _notes[index]);
+        return GestureDetector(
+          onTap: () async {
+            String note = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NoteRecordPage(noteText: _notes[index]))
+            );
+            if(note != null) {
+              setState(() {
+                _notes[index] = note;
+              });
+            }
+          },
+          child: NotePreview(noteText: _notes[index])
+        );
       }
     ) :
     Center(child: Text('Não existem notas cadastradas ainda.'));
