@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:note_app/pages/note_record_page.dart';
 import 'package:note_app/widgets/note_preview.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<String> _notes = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,22 +17,34 @@ class Home extends StatelessWidget {
         title: Text('Minhas notas'),
         centerTitle: true,
       ),
-      body: GridView.count(
-        crossAxisCount: 3,
-        children: List.generate(100, (index) {
-          return NotePreview(noteText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
-        }),
-      ),
+      body: _buildNoteList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           String note = await Navigator.push(
             context,
             MaterialPageRoute(builder: (BuildContext context) => NoteRecordPage())
           );
-          //TODO: salvar a nota recebida
+          setState(() {
+            _notes.add(note);
+          });
         },
         child: Icon(Icons.add)
       ),
     );
   }
+
+  Widget _buildNoteList() {
+    return _notes.length > 0 ?
+    GridView.builder(
+      itemCount: _notes.length,
+      padding: const EdgeInsets.all(8.0),
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 175.0),
+      itemBuilder: (BuildContext context, int index) {
+        return NotePreview(noteText: _notes[index]);
+      }
+    ) :
+    Center(child: Text('Não existem notas cadastradas ainda.'));
+
+  }
+  
 }
