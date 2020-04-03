@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/pages/note_record_page.dart';
+import 'package:note_app/services/storage.dart';
 import 'package:note_app/widgets/note_preview.dart';
 
 class Home extends StatefulWidget {
@@ -8,7 +9,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Storage _storage = Storage();
   List<String> _notes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _storage.getNotes().then((notesList) {
+      setState(() {
+        _notes.addAll(notesList);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +49,7 @@ class _HomeState extends State<Home> {
           setState(() {
             _notes.add(note);
           });
+          _storage.saveNotes(notes: _notes);
         }
       },
       child: Icon(Icons.add)
