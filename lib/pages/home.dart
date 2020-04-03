@@ -73,6 +73,7 @@ class _HomeState extends State<Home> {
               setState(() {
                 _notes[index] = note;
               });
+              _storage.saveNotes(notes: _notes);
             }
           },
           child: NotePreview(noteText: _notes[index])
