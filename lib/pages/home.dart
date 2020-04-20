@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/pages/note_record_page.dart';
-import 'package:note_app/widgets/note_preview.dart';
+import 'package:flutter_note_app/pages/note_record_page.dart';
+import 'package:flutter_note_app/services/storage.dart';
+import 'package:flutter_note_app/widgets/note_preview.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -8,7 +9,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Storage _storage = Storage();
   List<String> _notes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _storage.getnotes().then((noteList) {
+      setState(() {
+        _notes.addAll(noteList);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,27 +31,25 @@ class _HomeState extends State<Home> {
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: Text('Minhas notas'),
-      centerTitle: true,
-    );
-  }
-
   FloatingActionButton _buildAddNoteButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () async {
-        String note = await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => NoteRecordPage())
-        );
+        String note = await Navigator.push(context, MaterialPageRoute(builder: (context) => NoteRecordPage()));
         if(note != null) {
           setState(() {
             _notes.add(note);
           });
+          _storage.saveNotes(notes: _notes);
         }
       },
-      child: Icon(Icons.add)
+      child: Icon(Icons.add),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Text('Minhas notas'),
+      centerTitle: true,
     );
   }
 
@@ -52,22 +62,19 @@ class _HomeState extends State<Home> {
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () async {
-            String note = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => NoteRecordPage(noteText: _notes[index]))
-            );
+            String note = await Navigator.push(context, MaterialPageRoute(builder: (context) => NoteRecordPage(noteText: _notes[index])));
+            
             if(note != null) {
               setState(() {
                 _notes[index] = note;
               });
+              _storage.saveNotes(notes: _notes);
             }
           },
-          child: NotePreview(noteText: _notes[index])
+          child: NotePreview(noteText: _notes[index]),
         );
       }
     ) :
-    Center(child: Text('Não existem notas cadastradas ainda.'));
-
+    Center(child: Text('Não existem notas cadastradas ainda'));
   }
-  
 }

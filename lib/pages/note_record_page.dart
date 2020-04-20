@@ -5,7 +5,7 @@ class NoteRecordPage extends StatefulWidget {
 
   const NoteRecordPage({
     Key key,
-    this.noteText,
+    this.noteText
   }) : super(key: key);
 
   @override
@@ -21,20 +21,21 @@ class _NoteRecordPageState extends State<NoteRecordPage> {
   void initState() {
     super.initState();
     _note = widget.noteText;
-     _noteController = TextEditingController(text: _note);
+    _noteController = TextEditingController(text: _note);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Nota'),
         centerTitle: true,
-        backgroundColor: Color(0xFFf9f9f9),
+        backgroundColor: const Color(0xFFf9f9f9),
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: const Color(0xFF4C54B9)
+            color: const Color(0xFF4C54B9),
           ),
           onPressed: () => Navigator.pop(context)
         ),
@@ -45,7 +46,7 @@ class _NoteRecordPageState extends State<NoteRecordPage> {
           )
         ],
       ),
-      body: _buildNoteInput()
+      body: _buildNoteInput(),
     );
   }
 
@@ -53,7 +54,7 @@ class _NoteRecordPageState extends State<NoteRecordPage> {
     return Form(
       key: _noteFormKey,
       child: ListView(
-        children: [
+        children: <Widget>[
           TextFormField(
             controller: _noteController,
             validator: (nota) => nota == '' ? 'Insira algum valor para ser anotado' : null,
@@ -63,11 +64,11 @@ class _NoteRecordPageState extends State<NoteRecordPage> {
               border: InputBorder.none,
               hintText: 'Nota',
               isDense: true,
-              contentPadding: EdgeInsets.all(10),
+              contentPadding: EdgeInsets.all(10.0),
               alignLabelWithHint: true
             ),
-          ),
-        ]
+          )
+        ],
       )
     );
   }
